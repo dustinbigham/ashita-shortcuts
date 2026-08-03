@@ -6,11 +6,11 @@
 * that can be resolved through Ashita resources.
 --]]
 
-addon.name      = 'shortcuts';
+addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
 addon.version   = '2.2.10';
-addon.desc      = 'Adds Windower Shortcuts style aliases and action commands for Ashita.';
-addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
+addon.desc      = 'Adds Windower Shortcuts-style aliases and action commands for Ashita.';
+addon.link      = 'https://github.com/dustinbigham/ashita-windower-shortcuts';
 
 require('common');
 
@@ -961,9 +961,9 @@ local function handle_target_command(command, key, args)
 end
 
 local function print_help()
-    print(chat.header(addon.name):append(chat.message('Windower-style shortcuts are enabled.')));
+    print(chat.header(addon.name):append(chat.message('Ashita Windower-style shortcuts are enabled.')));
     print(chat.header(addon.name):append(chat.message('Examples: /c1, /bl2, /fg2, /rr, /rf p1, /slp2, /stn, /carb, /sa, /tra, /fb')));
-    print(chat.header(addon.name):append(chat.message('Debug: /shortcuts debug')));
+    print(chat.header(addon.name):append(chat.message('Debug: /ashitashortcuts debug or /asc debug')));
 end
 
 ashita.events.register('command', 'shortcuts_command_cb', function (e)
@@ -994,7 +994,7 @@ ashita.events.register('command', 'shortcuts_command_cb', function (e)
     end
 
     command = args[1]:lower();
-    if (command == '/shortcuts') then
+    if (command == '/ashitashortcuts' or command == '/asc') then
         e.blocked = true;
         if (#args >= 2 and args[2]:lower() == 'debug') then
             debug_enabled = not debug_enabled;

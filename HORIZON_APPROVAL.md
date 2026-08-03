@@ -2,13 +2,16 @@
 
 ## Current Status
 
-This addon is not approved by HorizonXI at the time of publication.
+This addon is packaged as `ashitashortcuts` and is not approved by HorizonXI at the time of publication.
 
 The goal of this repository is to make the source public for HorizonXI staff review.
 
 ## Behavior Summary
 
 - Ashita v4 Lua addon.
+- Public addon name: `ashitashortcuts`.
+- Load command: `/addon load ashitashortcuts`.
+- Help commands: `/ashitashortcuts` and `/asc`.
 - Registers one `command` event callback.
 - Expands manual shortcut commands into normal client commands such as `/ma`, `/ja`, `/ws`, `/pet`, `/ra`, `/target`, and `/assist`.
 - Uses `AshitaCore:GetChatManager():QueueCommand(1, command)` to send the expanded command.

@@ -1,6 +1,6 @@
-# ashita-shortcuts
+# ashita-windower-shortcuts
 
-Ashita v4 addon that provides Windower Shortcuts-style command aliases for Final Fantasy XI clients.
+Ashita v4 addon, packaged as `ashitashortcuts`, that provides Windower Shortcuts-style command aliases for Final Fantasy XI clients.
 
 This is a behavior-oriented Ashita port intended for public review. It is not currently approved for HorizonXI unless HorizonXI staff explicitly approves it. Do not use it on HorizonXI before approval.
 
@@ -9,19 +9,25 @@ This is a behavior-oriented Ashita port intended for public review. It is not cu
 Copy the addon folder into your Ashita install:
 
 ```txt
-Ashita/addons/shortcuts/shortcuts.lua
+Ashita/addons/ashitashortcuts/ashitashortcuts.lua
 ```
 
 Load it in game:
 
 ```txt
-/addon load shortcuts
+/addon load ashitashortcuts
 ```
 
 Show the small in-game help:
 
 ```txt
-/shortcuts
+/ashitashortcuts
+```
+
+Short help alias:
+
+```txt
+/asc
 ```
 
 ## Examples
@@ -64,6 +70,8 @@ The addon should be treated as unapproved unless and until HorizonXI staff appro
 
 ## Attribution
 
-This addon is inspired by the command style and user-facing behavior of Windower Shortcuts:
+This addon is intentionally named `ashitashortcuts` to distinguish it from the Windower addon named `Shortcuts`.
+
+It is inspired by the command style and user-facing behavior of Windower Shortcuts:
 
 https://github.com/mverteuil/windower4-addons/tree/master/shortcuts
