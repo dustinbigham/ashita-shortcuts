@@ -1,16 +1,16 @@
 --[[
-* Ashita v4 companion addon for Windower Shortcuts-style aliases.
+* Ashita v4 companion addon for command shortcut aliases.
 *
 * This addon intentionally stays conservative around client and Ashita commands.
-* It handles Windower-style aliases, target token cleanup, and real game actions
+* It handles command aliases, target token cleanup, and real game actions
 * that can be resolved through Ashita resources.
 --]]
 
 addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
 addon.version   = '2.2.10';
-addon.desc      = 'Adds Windower Shortcuts-style aliases and action commands for Ashita.';
-addon.link      = 'https://github.com/dustinbigham/ashita-windower-shortcuts';
+addon.desc      = 'Adds command shortcut aliases and action commands for Ashita.';
+addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
 
 require('common');
 
@@ -961,12 +961,12 @@ local function handle_target_command(command, key, args)
 end
 
 local function print_help()
-    print(chat.header(addon.name):append(chat.message('Ashita Windower-style shortcuts are enabled.')));
+    print(chat.header(addon.name):append(chat.message('Ashita command shortcuts are enabled.')));
     print(chat.header(addon.name):append(chat.message('Examples: /c1, /bl2, /fg2, /rr, /rf p1, /slp2, /stn, /carb, /sa, /tra, /fb')));
     print(chat.header(addon.name):append(chat.message('Debug: /ashitashortcuts debug or /asc debug')));
 end
 
-ashita.events.register('command', 'shortcuts_command_cb', function (e)
+ashita.events.register('command', 'ashitashortcuts_command_cb', function (e)
     if (e.blocked) then
         return;
     end
