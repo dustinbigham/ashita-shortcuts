@@ -8,7 +8,7 @@
 
 addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
-addon.version   = '2.2.10';
+addon.version   = '2.2.11';
 addon.desc      = 'Adds command shortcut aliases and action commands for Ashita.';
 addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
 
@@ -150,6 +150,7 @@ local aliases = {
     slg2  = { prefix = '/ma', name = 'Sleepga II',    target = '<t>'  },
     sil   = { prefix = '/ma', name = 'Silence',       target = '<t>'  },
     para  = { prefix = '/ma', name = 'Paralyze',      target = '<t>'  },
+    pna   = { prefix = '/ma', name = 'Paralyna',      target = '<me>', friendly = true },
     slw   = { prefix = '/ma', name = 'Slow',          target = '<t>'  },
     slw1  = { prefix = '/ma', name = 'Slow',          target = '<t>'  },
     slw2  = { prefix = '/ma', name = 'Slow II',       target = '<t>'  },

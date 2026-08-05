@@ -42,6 +42,7 @@ Short help alias:
 /bl2
 /fg2
 /slp2
+/pna
 /rf p1
 /tra
 /fb
