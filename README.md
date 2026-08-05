@@ -36,6 +36,7 @@ Short help alias:
 /c1
 /c1 me
 /c1 p1
+/c1 stp
 /c1 a12
 /rr
 /b2
@@ -43,12 +44,13 @@ Short help alias:
 /fg2
 /slp2
 /pna
+/pna stp
 /rf p1
 /tra
 /fb
 ```
 
-Target shorthands include `me`, `self`, `t`, `bt`, `ft`, `st`, `stpc`, `stnpc`, `stpt`, `stal`, `lastst`, `scan`, `r`, `pet`, `p0` through `p5`, and `a10` through `a25`.
+Target shorthands include `me`, `self`, `t`, `bt`, `ft`, `st`, `stpc`, `stnpc`, `stp`, `stpt`, `sta`, `stal`, `lastst`, `scan`, `r`, `pet`, `p0` through `p5`, and `a10` through `a25`.
 
 ## Scope
 

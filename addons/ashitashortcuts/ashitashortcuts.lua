@@ -8,7 +8,7 @@
 
 addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
-addon.version   = '2.2.11';
+addon.version   = '2.2.12';
 addon.desc      = 'Adds command shortcut aliases and action commands for Ashita.';
 addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
 
@@ -349,7 +349,9 @@ local target_aliases = {
     st = '<st>',
     stpc = '<stpc>',
     stnpc = '<stnpc>',
+    stp = '<stpt>',
     stpt = '<stpt>',
+    sta = '<stal>',
     stal = '<stal>',
     lastst = '<lastst>',
     scan = '<scan>',
@@ -963,7 +965,7 @@ end
 
 local function print_help()
     print(chat.header(addon.name):append(chat.message('Ashita command shortcuts are enabled.')));
-    print(chat.header(addon.name):append(chat.message('Examples: /c1, /bl2, /fg2, /rr, /rf p1, /slp2, /stn, /carb, /sa, /tra, /fb')));
+    print(chat.header(addon.name):append(chat.message('Examples: /c1, /c1 stp, /bl2, /fg2, /rr, /rf p1, /pna stp, /tra, /fb')));
     print(chat.header(addon.name):append(chat.message('Debug: /ashitashortcuts debug or /asc debug')));
 end
 

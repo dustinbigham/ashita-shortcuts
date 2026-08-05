@@ -27,7 +27,7 @@ Players should not use this addon, or any shortcut tool, to gain an unfair claim
 
 Areas likely worth staff review:
 
-- target shorthand expansion such as `p1` to `<p1>` and `a12` to `<a12>`
+- target shorthand expansion such as `p1` to `<p1>`, `a12` to `<a12>`, `stp` to `<stpt>`, and `sta` to `<stal>`
 - default target behavior for friendly spells
 - passthrough list for built-in client, Ashita, plugin, and addon commands
 - dynamic action-name resolution through Ashita resources
