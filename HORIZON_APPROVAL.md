@@ -13,11 +13,13 @@ The goal of this repository is to make the source public for HorizonXI staff rev
 - Load command: `/addon load ashitashortcuts`.
 - Help commands: `/ashitashortcuts` and `/asc`.
 - Registers one `command` event callback.
-- Expands manual shortcut commands into normal client commands such as `/ma`, `/ja`, `/ws`, `/pet`, `/ra`, `/target`, and `/assist`.
+- Expands manual shortcut commands into normal client commands such as `/ma`, `/ja`, `/ws`, `/pet`, and `/item`.
 - Uses `AshitaCore:GetChatManager():QueueCommand(1, command)` to send the expanded command.
 - Does not inject packets.
 - Does not loop, repeat, schedule, or automate actions.
-- Does not scan mobs, claim mobs, or choose targets automatically.
+- Does not scan mobs, claim mobs, target by player/monster/NPC names, or expand `<scan>`.
+- Does not rewrite `/target`, `/ta`, `/attack`, `/ra`, `/shoot`, `/throw`, `/follow`, or `/assist`.
+- Numeric target repair is limited to party/alliance member IDs only; it does not scan the entity table or convert world target IDs.
 
 ## Policy Caveat
 
@@ -28,6 +30,6 @@ Players should not use this addon, or any shortcut tool, to gain an unfair claim
 Areas likely worth staff review:
 
 - target shorthand expansion such as `p1` to `<p1>`, `a12` to `<a12>`, `stp` to `<stpt>`, and `sta` to `<stal>`
-- default target behavior for friendly spells
+- default target behavior for friendly spells, which uses the current target only when it appears to be friendly and otherwise uses self
 - passthrough list for built-in client, Ashita, plugin, and addon commands
 - dynamic action-name resolution through Ashita resources

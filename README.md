@@ -50,7 +50,9 @@ Short help alias:
 /fb
 ```
 
-Target shorthands include `me`, `self`, `t`, `bt`, `ft`, `st`, `stpc`, `stnpc`, `stp`, `stpt`, `sta`, `stal`, `lastst`, `scan`, `r`, `pet`, `p0` through `p5`, and `a10` through `a25`.
+Target shorthands include `me`, `self`, `t`, `bt`, `ft`, `st`, `stpc`, `stnpc`, `stp`, `stpt`, `sta`, `stal`, `lastst`, `r`, `pet`, `p0` through `p5`, and `a10` through `a25`.
+
+Named or partial-name targets and `<scan>` are intentionally not expanded by this addon.
 
 ## Scope
 
@@ -60,6 +62,8 @@ It does not:
 
 - automate repeated actions
 - claim monsters automatically
+- target by player, monster, or NPC names
+- expand `<scan>`
 - path, follow, or move the player
 - inject action packets
 - read inventory or storage

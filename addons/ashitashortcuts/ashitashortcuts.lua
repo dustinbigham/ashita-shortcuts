@@ -2,13 +2,13 @@
 * Ashita v4 companion addon for command shortcut aliases.
 *
 * This addon intentionally stays conservative around client and Ashita commands.
-* It handles command aliases, target token cleanup, and real game actions
+* It handles command aliases, target token cleanup, and explicitly aliased game actions
 * that can be resolved through Ashita resources.
 --]]
 
 addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
-addon.version   = '2.2.12';
+addon.version   = '2.2.13';
 addon.desc      = 'Adds command shortcut aliases and action commands for Ashita.';
 addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
 
@@ -323,23 +323,6 @@ local native_prefix_commands = {
     item = true,
 };
 
-local target_commands = {
-    a = '/attack',
-    attack = '/attack',
-    assist = '/assist',
-    c = '/check',
-    check = '/check',
-    follow = '/follow',
-    ra = '/ra',
-    range = '/ra',
-    rec = '/recruit',
-    recruit = '/recruit',
-    shoot = '/ra',
-    ta = '/ta',
-    target = '/target',
-    throw = '/ra',
-};
-
 local target_aliases = {
     me = '<me>',
     self = '<me>',
@@ -354,7 +337,6 @@ local target_aliases = {
     sta = '<stal>',
     stal = '<stal>',
     lastst = '<lastst>',
-    scan = '<scan>',
     r = '<r>',
     pet = '<pet>',
     p0 = '<p0>',
@@ -376,6 +358,11 @@ local target_aliases = {
     a24 = '<a24>',
     a25 = '<a25>',
 };
+
+local allowed_target_tokens = {};
+for _, token in pairs(target_aliases) do
+    allowed_target_tokens[token:lower()] = token;
+end
 
 local passthrough_commands = {
     acmd = true,
@@ -660,32 +647,6 @@ local function resolve_resource_action(name, forced_prefix)
     return best;
 end
 
-local function get_entity_index_by_server_id(id)
-    local entity = AshitaCore:GetMemoryManager():GetEntity();
-    if (entity == nil or id == nil or id == 0) then
-        return nil;
-    end
-
-    if (bit.band(id, 0x1000000) ~= 0) then
-        local index = bit.band(id, 0xFFF);
-        if (index >= 0x900) then
-            index = index - 0x100;
-        end
-
-        if (index > 0 and index < 0x900 and entity:GetServerId(index) == id) then
-            return index;
-        end
-    end
-
-    for index = 1, 0x8FF do
-        if (entity:GetServerId(index) == id) then
-            return index;
-        end
-    end
-
-    return nil;
-end
-
 local function get_party_token_by_server_id(id)
     local party = AshitaCore:GetMemoryManager():GetParty();
     if (party == nil or id == nil or id == 0) then
@@ -709,44 +670,13 @@ local function get_party_token_by_server_id(id)
     return nil;
 end
 
-local function get_target_token_by_server_id(id)
-    local target_manager = AshitaCore:GetMemoryManager():GetTarget();
-    local entity = AshitaCore:GetMemoryManager():GetEntity();
-    if (target_manager == nil or entity == nil or id == nil or id == 0) then
-        return nil;
-    end
-
-    if (target_manager:GetIsSubTargetActive() ~= 0) then
-        for slot = 0, 1 do
-            local target_index = target_manager:GetTargetIndex(slot);
-            if (target_manager:GetServerId(slot) == id or (target_index ~= nil and target_index ~= 0 and entity:GetServerId(target_index) == id)) then
-                return '<lastst>';
-            end
-        end
-    end
-
-    local last_target_index = target_manager:GetLastTargetIndex();
-    if (last_target_index ~= nil and last_target_index ~= 0 and entity:GetServerId(last_target_index) == id) then
-        return '<lastst>';
-    end
-
-    local target_index = target_manager:GetTargetIndex(0);
-    if (target_manager:GetServerId(0) == id or (target_index ~= nil and target_index ~= 0 and entity:GetServerId(target_index) == id)) then
-        return '<t>';
-    end
-
-    return nil;
-end
-
 local function resolve_numeric_target(target)
     local id = tonumber(target);
     if (id == nil or id == 0) then
         return nil;
     end
 
-    return get_party_token_by_server_id(id)
-        or get_target_token_by_server_id(id)
-        or (get_entity_index_by_server_id(id) ~= nil and '<t>' or nil);
+    return get_party_token_by_server_id(id);
 end
 
 local function normalize_target(target)
@@ -765,14 +695,14 @@ local function normalize_target(target)
     end
 
     if (target:match('^<.+>$') ~= nil) then
-        return target, true;
+        return allowed_target_tokens[key], true;
     end
 
     if (target:match('^%d+$') ~= nil) then
         return resolve_numeric_target(target), true;
     end
 
-    return target, false;
+    return nil, false;
 end
 
 local function should_passthrough_native_command(raw_command, key)
@@ -780,14 +710,8 @@ local function should_passthrough_native_command(raw_command, key)
         return false;
     end
 
-    local target = raw_command:match('^/%S+%s+"[^"]+"%s*(.*)$');
-    if (target ~= nil) then
-        target = trim_name(target);
-        if (target == nil or target == '') then
-            return true;
-        end
-
-        return target:match('^%d+$') == nil;
+    if (raw_command:match('^/%S+%s+"[^"]+"') ~= nil) then
+        return true;
     end
 
     if (raw_command:match('^/%S+%s+%S+%s+<[^>]+>%s*$') ~= nil) then
@@ -862,18 +786,12 @@ local function build_action_command(alias, target)
     local normalized = nil;
     if (target ~= nil and target ~= '') then
         normalized = normalize_target(target);
+        if (normalized == nil) then
+            return nil;
+        end
     end
 
     return ('%s "%s" %s'):format(alias.prefix, alias.name, normalized or get_default_target(alias));
-end
-
-local function build_target_command(command, target)
-    local normalized = '<t>';
-    if (target ~= nil and target ~= '') then
-        normalized = normalize_target(target) or '<t>';
-    end
-
-    return ('%s %s'):format(command, normalized);
 end
 
 local function handle_double_slash(command, args)
@@ -949,20 +867,6 @@ local function handle_prefixed_command(command, key, args)
     return build_action_command(action, target);
 end
 
-local function handle_target_command(command, key, args)
-    local canonical = target_commands[key];
-    if (canonical == nil) then
-        return nil;
-    end
-
-    local target = nil;
-    if (#args > 1) then
-        target = join_args(args, 2, #args);
-    end
-
-    return build_target_command(canonical, target);
-end
-
 local function print_help()
     print(chat.header(addon.name):append(chat.message('Ashita command shortcuts are enabled.')));
     print(chat.header(addon.name):append(chat.message('Examples: /c1, /c1 stp, /bl2, /fg2, /rr, /rf p1, /pna stp, /tra, /fb')));
@@ -1028,8 +932,6 @@ ashita.events.register('command', 'ashitashortcuts_command_cb', function (e)
         end
 
         result = result or handle_prefixed_command(command, key, args);
-        result = result or handle_target_command(command, key, args);
-
         if (result == nil and not passthrough_commands[key]) then
             local action = resolve_resource_action(key, nil);
             if (action ~= nil) then
