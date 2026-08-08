@@ -20,6 +20,7 @@ The goal of this repository is to make the source public for HorizonXI staff rev
 - Does not scan mobs, claim mobs, target by player/monster/NPC names, or expand `<scan>`.
 - Does not rewrite `/target`, `/ta`, `/attack`, `/ra`, `/shoot`, `/throw`, `/follow`, or `/assist`.
 - Numeric target repair is limited to party/alliance member IDs only; it does not scan the entity table or convert world target IDs.
+- Bare hostile spell shortcuts default to the built-in battle target token `<bt>`; explicit user-provided target tokens override the default.
 
 ## Policy Caveat
 
@@ -31,5 +32,6 @@ Areas likely worth staff review:
 
 - target shorthand expansion such as `p1` to `<p1>`, `a12` to `<a12>`, `stp` to `<stpt>`, and `sta` to `<stal>`
 - default target behavior for friendly spells, which uses the current target only when it appears to be friendly and otherwise uses self
+- hostile spell name list used to choose `<bt>` as the default target
 - passthrough list for built-in client, Ashita, plugin, and addon commands
 - dynamic action-name resolution through Ashita resources

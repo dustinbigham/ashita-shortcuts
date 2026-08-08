@@ -8,7 +8,7 @@
 
 addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
-addon.version   = '2.2.13';
+addon.version   = '2.2.14';
 addon.desc      = 'Adds command shortcut aliases and action commands for Ashita.';
 addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
 
@@ -530,6 +530,63 @@ local function strip_action_name(name)
     end);
 end
 
+local hostile_spell_names = {
+    'Stone', 'Stone II', 'Stone III', 'Stone IV', 'Stone V', 'Stone VI',
+    'Water', 'Water II', 'Water III', 'Water IV', 'Water V', 'Water VI',
+    'Aero', 'Aero II', 'Aero III', 'Aero IV', 'Aero V', 'Aero VI',
+    'Fire', 'Fire II', 'Fire III', 'Fire IV', 'Fire V', 'Fire VI',
+    'Blizzard', 'Blizzard II', 'Blizzard III', 'Blizzard IV', 'Blizzard V', 'Blizzard VI',
+    'Thunder', 'Thunder II', 'Thunder III', 'Thunder IV', 'Thunder V', 'Thunder VI',
+    'Stonega', 'Stonega II', 'Stonega III',
+    'Waterga', 'Waterga II', 'Waterga III',
+    'Aeroga', 'Aeroga II', 'Aeroga III',
+    'Firaga', 'Firaga II', 'Firaga III',
+    'Blizzaga', 'Blizzaga II', 'Blizzaga III',
+    'Thundaga', 'Thundaga II', 'Thundaga III',
+    'Flare', 'Flare II', 'Freeze', 'Freeze II', 'Tornado', 'Tornado II',
+    'Quake', 'Quake II', 'Burst', 'Burst II', 'Flood', 'Flood II',
+    'Dia', 'Dia II', 'Dia III', 'Diaga',
+    'Bio', 'Bio II', 'Bio III',
+    'Poison', 'Poison II', 'Poisonga',
+    'Sleep', 'Sleep II', 'Sleepga', 'Sleepga II',
+    'Bind', 'Silence', 'Paralyze', 'Slow', 'Slow II',
+    'Blind', 'Blind II', 'Gravity', 'Dispel', 'Stun', 'Break', 'Breakga',
+    'Drain', 'Drain II', 'Aspir', 'Aspir II',
+    'Burn', 'Frost', 'Choke', 'Rasp', 'Shock', 'Drown',
+    'Absorb-STR', 'Absorb-DEX', 'Absorb-VIT', 'Absorb-AGI', 'Absorb-INT',
+    'Absorb-MND', 'Absorb-CHR', 'Absorb-TP', 'Absorb-ACC',
+    'Flash', 'Repose', 'Addle', 'Distract', 'Distract II', 'Frazzle', 'Frazzle II',
+    'Katon: Ichi', 'Katon: Ni', 'Katon: San',
+    'Hyoton: Ichi', 'Hyoton: Ni', 'Hyoton: San',
+    'Huton: Ichi', 'Huton: Ni', 'Huton: San',
+    'Doton: Ichi', 'Doton: Ni', 'Doton: San',
+    'Raiton: Ichi', 'Raiton: Ni', 'Raiton: San',
+    'Suiton: Ichi', 'Suiton: Ni', 'Suiton: San',
+    'Kurayami: Ichi', 'Kurayami: Ni',
+    'Hojo: Ichi', 'Hojo: Ni',
+    'Jubaku: Ichi', 'Dokumori: Ichi', 'Aisha: Ichi',
+    'Foe Requiem', 'Foe Requiem II', 'Foe Requiem III', 'Foe Requiem IV',
+    'Foe Requiem V', 'Foe Requiem VI', 'Foe Requiem VII',
+    'Foe Lullaby', 'Horde Lullaby',
+    'Carnage Elegy', 'Battlefield Elegy',
+    'Magic Finale',
+    'Earth Threnody', 'Water Threnody', 'Wind Threnody', 'Fire Threnody',
+    'Ice Threnody', 'Lightning Threnody', 'Light Threnody', 'Dark Threnody',
+};
+
+local hostile_spells = {};
+for _, name in ipairs(hostile_spell_names) do
+    local key = strip_action_name(name);
+    if (key ~= nil) then
+        hostile_spells[key] = true;
+    end
+end
+
+local function is_hostile_spell_name(name)
+    local key = strip_action_name(name);
+    return key ~= nil and hostile_spells[key] == true;
+end
+
 local function is_ascii_action_name(name)
     if (name == nil or name == '') then
         return false;
@@ -601,11 +658,12 @@ local function build_resource_actions()
         local spell = resources:GetSpellById(id);
         local name = get_english_name(spell);
         if (name ~= nil and name ~= '') then
+            local hostile = is_hostile_spell_name(name);
             add_resource_names(spell, {
                 prefix = '/ma',
                 name = name,
-                target = can_target_self(spell) and '<me>' or '<t>',
-                friendly = can_target_self(spell),
+                target = hostile and '<bt>' or (can_target_self(spell) and '<me>' or '<t>'),
+                friendly = (not hostile) and can_target_self(spell),
                 priority = 1,
             });
         end
@@ -775,6 +833,10 @@ local function is_current_target_friendly()
 end
 
 local function get_default_target(alias)
+    if (alias.prefix == '/ma' and is_hostile_spell_name(alias.name)) then
+        return '<bt>';
+    end
+
     if (alias.friendly and is_current_target_friendly()) then
         return '<t>';
     end
