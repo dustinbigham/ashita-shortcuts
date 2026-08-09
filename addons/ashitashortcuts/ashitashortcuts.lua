@@ -8,7 +8,7 @@
 
 addon.name      = 'ashitashortcuts';
 addon.author    = 'dustinbigham';
-addon.version   = '2.2.14';
+addon.version   = '2.2.15';
 addon.desc      = 'Adds command shortcut aliases and action commands for Ashita.';
 addon.link      = 'https://github.com/dustinbigham/ashita-shortcuts';
 
@@ -787,14 +787,27 @@ local function queue_command(command)
     AshitaCore:GetChatManager():QueueCommand(1, command);
 end
 
-local function is_current_target_friendly()
+local function get_current_target_index()
     local target_manager = AshitaCore:GetMemoryManager():GetTarget();
     if (target_manager == nil) then
-        return false;
+        return nil;
     end
 
     local target_index = target_manager:GetTargetIndex(0);
     if (target_index == nil or target_index == 0) then
+        return nil;
+    end
+
+    return target_index;
+end
+
+local function has_current_target()
+    return get_current_target_index() ~= nil;
+end
+
+local function is_current_target_friendly()
+    local target_index = get_current_target_index();
+    if (target_index == nil) then
         return false;
     end
 
@@ -834,7 +847,7 @@ end
 
 local function get_default_target(alias)
     if (alias.prefix == '/ma' and is_hostile_spell_name(alias.name)) then
-        return '<bt>';
+        return has_current_target() and '<t>' or '<bt>';
     end
 
     if (alias.friendly and is_current_target_friendly()) then

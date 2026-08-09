@@ -50,7 +50,7 @@ Short help alias:
 /fb
 ```
 
-Bare hostile spell shortcuts default to `<bt>`, for example `/bl2` expands to `/ma "Blizzard II" <bt>`. Friendly spells still default to self unless your current target is a valid friendly target. Explicit targets still override the default, such as `/bl2 t`, `/c1 p1`, or `/slp2 stnpc`.
+Bare hostile spell shortcuts use your current target first, then fall back to `<bt>` if nothing is selected. For example, `/bl2` expands to `/ma "Blizzard II" <t>` when you have a target selected, or `/ma "Blizzard II" <bt>` when you do not. Friendly spells still default to self unless your current target is a valid friendly target. Explicit targets still override the default, such as `/bl2 t`, `/c1 p1`, or `/slp2 stnpc`.
 
 Target shorthands include `me`, `self`, `t`, `bt`, `ft`, `st`, `stpc`, `stnpc`, `stp`, `stpt`, `sta`, `stal`, `lastst`, `r`, `pet`, `p0` through `p5`, and `a10` through `a25`.
 
